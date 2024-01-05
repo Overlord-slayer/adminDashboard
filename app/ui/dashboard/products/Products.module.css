@@ -18,7 +18,14 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
+
+.addButton:hover{
+    background-color: rgba(64, 114, 240, 0.8); /* Ajusta la opacidad del blanco (0.8 para un 80%) */
+    color: white;
+}
+
 
 .table{
     width: 100%;

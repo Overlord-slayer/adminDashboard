@@ -1,16 +1,37 @@
-import Search from '@/app/ui/dashboard/search/Search'
+/**
+ * Apartado para los productos, en este caso, se listan los productos existentes
+ * 
+ */
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+
 import styles from '@/app/ui/dashboard/products/Products.module.css'
+import Search from '@/app/ui/dashboard/search/Search'
 import Pagination from '@/app/ui/dashboard/pagination/Pagination'
 
-export default function ProductsPage() {
+import { fetchProducts } from '@/app/lib/data'
+
+type searchParamsProps = {
+  q?: string,
+  page?: string
+}
+type Props = {
+  searchParams: searchParamsProps,
+}
+
+const ProductsPage = async ({ searchParams }: Props) => {
+  const q = searchParams?.q || ""
+  const page = searchParams?.page || "1"
+  const {count, products } = await fetchProducts(q, page)
+
+  console.log(products)
   return (
     <div className={styles.container}>
       <div className={styles.top}>
         <Search placeHolder='Buscar un producto'/>
         <Link href="/dashboard/products/add">
+          {/* Redirige a la ventana /add */}
           <button className={styles.addButton}>Agregar</button>
         </Link>
         
@@ -27,26 +48,27 @@ export default function ProductsPage() {
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {products.map((product) => (
+            <tr key={product.id}>
             <td>
               <div className={styles.product}>
                 <Image
-                  src="/noproduct.jpg"
+                  src={product.img || "/noproduct.jpg"}
                   alt=''
                   width={40}
                   height={40}
                   className={styles.productImage}
                 />
-                Iphone
+                {product.title}
               </div>
             </td>
-            <td>Detalles extra</td>
-            <td>$999</td>
-            <td>13.02.2024</td>
-            <td>72</td>
+            <td>{product.desc}</td>
+            <td>{product.price}</td>
+            <td>{product.createdAt?.toString().slice(4,16)}</td>
+            <td>{product.stock}</td>
             <td>
               <div className={styles.buttons}>
-                <Link href="/">
+                <Link href="/dashboard/products/${product.id}">
                   <button className={`${styles.button} ${styles.view}`}>
                     Ver
                   </button>
@@ -57,9 +79,12 @@ export default function ProductsPage() {
               </div>
             </td>
           </tr>
+        ))}
         </tbody>
       </table>
-      <Pagination/>
+      <Pagination count={count}/>
     </div>
   )
 }
+
+export default ProductsPage
