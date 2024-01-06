@@ -7,6 +7,7 @@ import Search from '@/app/ui/dashboard/search/Search'
 import Pagination from '@/app/ui/dashboard/pagination/Pagination'
 
 import { fetchUsers } from '@/app/lib/data'
+import { deleteUser } from '@/app/lib/actions'
 
 type searchParamsProps = {
   q?: string,
@@ -69,9 +70,12 @@ const UsersPage = async ({ searchParams }: Props) => {
                     Ver
                   </button>
                 </Link>
+                <form action={deleteUser}>
+                  <input type="hidden" name="id" value={user.id} />
                   <button className={`${styles.button} ${styles.delete}`}>
                     Eliminar
                   </button>
+                </form>
               </div>
             </td>
           </tr>

@@ -1,5 +1,8 @@
 import mongoose from "mongoose"
 
+/**
+ * 
+ */
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
@@ -36,11 +39,13 @@ const userSchema = new mongoose.Schema({
   }
 }, { timestamps: true })
 
+/**
+ * 
+ */
 const productSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    unique: true,
   },
   desc: {
     type: String,
@@ -60,10 +65,10 @@ const productSchema = new mongoose.Schema({
     type: String,    
   },
   color: {
-    type: Boolean,
+    type: String,
   },
   size: {
-    type: String,    
+    type: Number,    
   },
 }, { timestamps: true })
 

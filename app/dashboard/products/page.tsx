@@ -11,6 +11,7 @@ import Search from '@/app/ui/dashboard/search/Search'
 import Pagination from '@/app/ui/dashboard/pagination/Pagination'
 
 import { fetchProducts } from '@/app/lib/data'
+import { deleteProduct } from '@/app/lib/actions'
 
 type searchParamsProps = {
   q?: string,
@@ -63,7 +64,7 @@ const ProductsPage = async ({ searchParams }: Props) => {
               </div>
             </td>
             <td>{product.desc}</td>
-            <td>{product.price}</td>
+            <td>${product.price}</td>
             <td>{product.createdAt?.toString().slice(4,16)}</td>
             <td>{product.stock}</td>
             <td>
@@ -73,9 +74,12 @@ const ProductsPage = async ({ searchParams }: Props) => {
                     Ver
                   </button>
                 </Link>
+                <form action={deleteProduct}>
+                  <input type="hidden" name="id" value={product.id}/>
                   <button className={`${styles.button} ${styles.delete}`}>
                     Eliminar
                   </button>
+                </form>
               </div>
             </td>
           </tr>
