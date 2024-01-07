@@ -4,7 +4,7 @@ import { menuItems } from '@/constants/sidebar'
 import MenuLink from './menuLink/MenuLink'
 import Image from 'next/image'
 import { MdLogout } from 'react-icons/md'
-import { auth, signOut } from '@/app/api/auth/auth'
+import { auth, signOut } from '@/app/api/auth/auth.js'
 
 
 const Sidebar = async () => {
@@ -15,7 +15,7 @@ const Sidebar = async () => {
       <div className={styles.user}>
         <Image className={styles.userImage} src="/noavatar.png" alt='perfil' width={50} height={50}/>
         <div className={styles.userDetail}>
-          <span className={styles.username}></span>
+          <span className={styles.username}>John Doe</span>
           <span className={styles.userTitle}>Administrador</span>
         </div>
       </div>
