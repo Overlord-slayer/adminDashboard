@@ -1,6 +1,8 @@
 import React from 'react'
-import styles from '@/app/ui/dashboard/users/singleUser/SingleUser.module.css'
 import Image from 'next/image'
+
+import styles from '@/app/ui/dashboard/users/singleUser/SingleUser.module.css'
+
 import { fetchUser } from '@/app/lib/data'
 import { updateUser } from '@/app/lib/actions'
 
@@ -13,6 +15,7 @@ type Props = {
 export default async function SingleUserPage({params}: Props) {
   const { id } = params
   const user = await fetchUser(id)
+  
   return (
     <div className={styles.container}>
       <div className={styles.infoContainer}>

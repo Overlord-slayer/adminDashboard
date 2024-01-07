@@ -22,8 +22,6 @@ const UsersPage = async ({ searchParams }: Props) => {
   const page = searchParams?.page || "1"
   const {count, users} = await fetchUsers(q, page)
 
-  
-
   return (
     <div className={styles.container}>
       <div className={styles.top}>

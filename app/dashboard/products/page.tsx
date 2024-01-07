@@ -26,7 +26,6 @@ const ProductsPage = async ({ searchParams }: Props) => {
   const page = searchParams?.page || "1"
   const {count, products } = await fetchProducts(q, page)
 
-  console.log(products)
   return (
     <div className={styles.container}>
       <div className={styles.top}>
@@ -69,7 +68,7 @@ const ProductsPage = async ({ searchParams }: Props) => {
             <td>{product.stock}</td>
             <td>
               <div className={styles.buttons}>
-                <Link href="/dashboard/products/${product.id}">
+                <Link href={`/dashboard/products/${product.id}`}>
                   <button className={`${styles.button} ${styles.view}`}>
                     Ver
                   </button>

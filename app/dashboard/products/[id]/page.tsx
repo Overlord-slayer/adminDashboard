@@ -1,6 +1,8 @@
 import React from 'react'
-import styles from '@/app/ui/dashboard/products/singleProduct/SingleProduct.module.css'
 import Image from 'next/image'
+
+import styles from '@/app/ui/dashboard/products/singleProduct/SingleProduct.module.css'
+
 import { fetchProduct } from '@/app/lib/data'
 import { updateProduct } from '@/app/lib/actions'
 

@@ -5,6 +5,7 @@ import { User, Product } from "./models"
 import { connectToDB } from "./utils"
 import { redirect } from "next/navigation"
 import bcrypt from "bcrypt"
+import { signIn } from "../api/auth/auth"
 
 /**
  * 
@@ -51,6 +52,7 @@ export const addUser = async (formData) => {
  * @param {*} formData 
  */
 export const updateUser = async (formData) => {
+  console.log("Valores del formulario ",formData)
   const {
     id,
     username,
@@ -70,10 +72,17 @@ export const updateUser = async (formData) => {
     }
 
     // Verificar que el campo sea actualizado para no subir nuevamente lo que ya estaba
-    Object.keys(updateFields).forEach(
-      (key) => 
-        (updateFields[key] === "" || undefined && delete updateFields[key]))
+    Object.keys(updateFields).forEach((key) => {
+      if (updateFields[key] === "" || 
+        updateFields[key] === undefined ||
+        updateFields[key] === null ||
+        key === '_id') {
+        delete updateFields[key]
 
+      }
+    })
+    
+    console.log("Valores actualizados ",updateFields)
     
     await User.findByIdAndUpdate(id, updateFields)
   } catch (error) {
@@ -143,6 +152,7 @@ export const addProduct = async (formData) => {
  * @param {*} formData 
  */
 export const updateProduct = async (formData) => {
+  console.log("Valores del form ", formData)
   const {
     id,
     title,
@@ -155,24 +165,30 @@ export const updateProduct = async (formData) => {
 
   try {
     connectToDB()
-    const updateFields = new Product({
+    const updateFields = {
       title,
       desc,
       price,
       stock,
       color,
       size,
+    }
 
+    // Filtrar por los campos que realmente fueron actualizados
+    Object.keys(updateFields).forEach((key) => {
+      if (updateFields[key] === "" || 
+        updateFields[key] === undefined || 
+        updateFields[key] === null ||
+        key === '_id') {
+        delete updateFields[key]
+      }
     })
 
-    Object.keys(updateFields).forEach(
-      (key) => 
-        (updateFields[key] === "" || undefined && delete updateFields[key])
-    )
-
+    console.log("Informacion actualizada ",updateFields)
+    // Actualizar los campos que fueron actualizados, segun el id
     await Product.findByIdAndUpdate(id, updateFields)
   } catch (error) {
-    throw new Error("Falló en la actualización del producto")
+    throw new Error(error.message)
   }
 
   revalidatePath("/dashboard/products")
@@ -195,4 +211,16 @@ export const deleteProduct = async (formData) => {
   }
 
   revalidatePath("/dashboard/products")
+}
+
+
+export const authenticate = async (formData) => {
+  const { username, password } = Object.fromEntries(formData)
+
+  try {
+    await signIn("credentials", { username, password })
+  } catch (error) {
+    throw error
+  }
+
 }
