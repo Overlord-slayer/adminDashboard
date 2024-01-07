@@ -7,19 +7,7 @@ import { authConfig } from "@/app/auth.config"
 import { connectToDB } from "@/app/lib/utils"
 import { User } from "@/app/lib/models"
 
-
-interface MySession extends Session {
-  username?: string;
-  img?: string;
-  // Agrega otras propiedades según sea necesario
-}
-
-interface User {
-  username: string;
-  // Otras propiedades del usuario
-}
-
-const login = async (credentials:Partial<Record<string, unknown>>) => {
+const login = async (credentials) => {
 
   try {
     connectToDB()
@@ -34,7 +22,7 @@ const login = async (credentials:Partial<Record<string, unknown>>) => {
     return user
 
   } catch (err) {
-    throw new Error((err as Error).message)
+    throw new Error(err.message)
   }
 }
 
@@ -54,25 +42,21 @@ export const { auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
+     // Función jwt: Personaliza el token JWT con información adicional
     async jwt({ token, user }) {
       if (user) {
-        token.username = (user as any).username
-        token.img = (user as any).img
+        // Agrega propiedades adicionales al token JWT
+        token.username = user.username
+        token.img = user.img
       }
       return token
     },
+    // Función session: Personaliza el objeto de sesión con información adicional
     async session({ session, token }) {
       if (token) {
-        const mySession = session as MySession
-       // Verificar si token.username es de tipo string antes de asignarlo a mySession.username
-        if (typeof token.username === 'string') {
-          mySession.username = token.username;
-        }
-
-        // Verificar si token.img es de tipo string antes de asignarlo a mySession.img
-        if (typeof token.img === 'string') {
-          mySession.img = token.img;
-        }
+        // Actualiza el objeto de sesión con información del token
+        session.user.username = token.username
+        session.user.img = token.img
       }
       return session
     },

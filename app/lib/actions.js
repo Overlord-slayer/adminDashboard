@@ -213,14 +213,25 @@ export const deleteProduct = async (formData) => {
   revalidatePath("/dashboard/products")
 }
 
-
+/**
+ * 
+ * @param {*} formData 
+ * @returns 
+ */
 export const authenticate = async (formData) => {
-  const { username, password } = Object.fromEntries(formData)
+  const { username, password } = Object.fromEntries(formData);
 
   try {
-    await signIn("credentials", { username, password })
+    const user = await signIn("credentials", { username, password });
+    return { user }; // Devuelve el usuario si la autenticación fue exitosa
   } catch (error) {
-    throw error
+    console.error("Error durante la autenticación:", error);
+    if (error.message.includes("NEXT_REDIRECT")) {
+      // Si es una redirección, puedes devolver la información de la redirección
+      return redirect("/dashboard")
+    } else {
+      // Si no es una redirección, devuelve un mensaje de error estándar
+      return { error: "Credenciales incorrectas" };
+    }
   }
-
 }

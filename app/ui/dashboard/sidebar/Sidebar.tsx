@@ -8,14 +8,18 @@ import { auth, signOut } from '@/app/api/auth/auth.js'
 
 
 const Sidebar = async () => {
-  const session = await auth()
-  console.log(session)
+  // Manejar el caso en el que auth() devuelve null
+  const authResult = await auth()
+  const user = authResult?.user
+  
   return (
     <div className={styles.container}>
       <div className={styles.user}>
-        <Image className={styles.userImage} src="/noavatar.png" alt='perfil' width={50} height={50}/>
+        {/* @ts-ignore */}
+        <Image className={styles.userImage} src={user.img || "/noavatar.png"} alt='perfil' width={50} height={50}/>
         <div className={styles.userDetail}>
-          <span className={styles.username}>John Doe</span>
+          {/* @ts-ignore */}
+          <span className={styles.username}>{user.username}</span>
           <span className={styles.userTitle}>Administrador</span>
         </div>
       </div>
